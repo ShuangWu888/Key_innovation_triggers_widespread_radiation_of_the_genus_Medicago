@@ -163,7 +163,30 @@ raxmlHPC-PTHREADS -s z19-70_cp_cds-half_gap.fa -n z19-70_cp_cds-half_gap.fa -m G
 ```
 
 ### ILS simulation
-#### Simulated 200,000 gene trees using the multispecies coalescent model of [Phybase](https://github.com/lliu1871/phybase) v.1.5 using the ASTRAL tree
+#### Simulated 10,000 gene trees using the multispecies coalescent model of [Phybase](https://github.com/lliu1871/phybase) v.1.5 using the ASTRAL tree
 ```
 Rscript phybase.R
+```
+#### Calculated gene-tree quartet frequencies of the five incongruent internal nodes in observed and simulated datasets using Twisst
+##### Observed dataset
+```
+python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node1.weights -g A M5 -g B M4 -g C M9 -g D M6
+python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node2.weights -g A M8 -g B M9 -g C M7 -g D M10
+python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node3.weights -g A M11 -g B M12 -g C M10 -g D M9
+python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node4.weights -g A M13 -g B M12 -g C M15 -g D M18
+python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node5.weights -g A M17 -g B M16 -g C M15 -g D M18
+```
+##### Simulated dataset
+```
+python twisst.py -t simulated.reroot.order.tree -w simulated.node1.weights -g A M5 -g B M4 -g C M9 -g D M6
+python twisst.py -t simulated.reroot.order.tree -w simulated.node2.weights -g A M8 -g B M9 -g C M7 -g D M10
+python twisst.py -t simulated.reroot.order.tree -w simulated.node3.weights -g A M11 -g B M12 -g C M10 -g D M9
+python twisst.py -t simulated.reroot.order.tree -w simulated.node4.weights -g A M13 -g B M12 -g C M15 -g D M18
+python twisst.py -t simulated.reroot.order.tree -w simulated.node5.weights -g A M17 -g B M16 -g C M15 -g D M18
+```
+
+### Hybridization inference
+[PhyloNetworks](https://crsl4.github.io/PhyloNetworks.jl/latest/)
+```
+sh phyloNetworks.sh
 ```
