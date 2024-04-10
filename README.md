@@ -85,7 +85,16 @@ raxmlHPC-PTHREADS -s z131-70_cp_cds-half_gap.fasta -n z131-70_cp_cds-half_gap.fa
 ```
 
 ## Divergence time estimation
+### To estimate divergence times, we reconstructed a species tree using one individual from each species based on the concatenated CDS alignment of 7,990 single copy nuclear genes
+```
+raxmlHPC-PTHREADS -s merge.cds.codon123.84species.fa -n merge.cds.codon123.84species.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
+```
+
 [r8s](https://sourceforge.net/projects/r8s/)
+
+```
+r8s -f r8s.84species.timetree5.ctl -b > r8s.84species.timetree5.smooth_100.out
+```
 
 [RelTime method in MEGA X](https://academic.oup.com/mbe/article/35/9/2334/5042667?login=false)
 
