@@ -51,3 +51,28 @@ Annotation
 
 [Geneious v.10.2.6](https://www.geneious.com/)
 
+## Phylogenomic analysis
+### nuclear genome
+#### For the concatenated whole genome SNPs
+```
+iqtree2 -s iqtree_DP_6-50_miss_0.2_sativa132_SNP.varsites.phy -st DNA -m GTR+ASC -B 1000 --bnni --prefix iqtree_DP_6-50_miss_0.2_sativa132_BS_SNP -T 50
+```
+#### The concatenated method
+[RaxML](https://github.com/stamatak/standard-RAxML)
+```
+raxmlHPC-PTHREADS -s merge.cds.codon123.fa -n merge.cds.codon123.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
+```
+#### The coalescent method
+Reconstructed phylogenetic trees of each single copy nuclear gene using RAxML
+```
+raxmlHPC-PTHREADS -s MsaG000053.cds.nonmiss.fa -n MsaG000053.cds.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
+```
+Estimated a coalescent tree using ASTRAL69 v.5.6.3
+```
+java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.tree.BS10.tre -o 4.arstral.CDS.tree.BS10.individual.tre 2>4.arstral.CDS.tree.BS10.individual.tre.log
+```
+### Plastome
+```
+raxmlHPC-PTHREADS -s z131-70_cp_cds-half_gap.fasta -n z131-70_cp_cds-half_gap.fasta -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
+```
+
