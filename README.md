@@ -29,7 +29,7 @@ perl identify_single_copy_gene.132sativa.pl
 ```
 
 ## Plastomes assembly and annotation
-Assembly
+### Assembly
 
 [NOVOPlasty3.8.3](https://github.com/ndierckx/NOVOPlasty)
 
@@ -43,14 +43,14 @@ perl NOVOPlasty3.8.3.pl -c config.txt
 get_organelle_from_reads.py -1 sample_1_clean.fq.gz -2 sample_2_clean.fq.gz -t 10 -o sample.plastome -F embplant_pt -R 10
 ```
 
-Annotation
+### Annotation
 
 [GeSeq](https://chlorobox.mpimp-golm.mpg.de/geseq.html)
 
 [Geneious v.10.2.6](https://www.geneious.com/)
 
 ## Phylogenomic analysis
-### nuclear genome
+### Nuclear genome
 #### For the concatenated whole genome SNPs
 ```
 iqtree2 -s iqtree_DP_6-50_miss_0.2_sativa132_SNP.varsites.phy -st DNA -m GTR+ASC -B 1000 --bnni --prefix iqtree_DP_6-50_miss_0.2_sativa132_BS_SNP -T 50
