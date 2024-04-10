@@ -2,4 +2,4 @@
 
 Key innovation triggers widespread radiation of the genus Medicago
 
-##Genotype calling
+## Genotype calling
