@@ -197,7 +197,7 @@ java -jar beagle.r1399.jar gt=vcf/Chr.vcf.gz out=vcf/Chr.vcf.gz.1219 ibd=true nt
 ```
 
 ### Admixture analysis (K from 2 to 13)
-e.g., when K=2,
+e.g., when K=2
 ```
 admixture --cv -j30 -B100 ./admixture.DP_6-50_miss_0.2.medicago100.SNP.vcf.gz/DP_6-50_miss_0.2.medicago100.SNP.vcf.gz.extract.ped 2 > ./admixture.DP_6-50_miss_0.2.medicago100.SNP.vcf.gz/DP_6-50_miss_0.2.medicago100.SNP.vcf.gz.extract.log2.out
 ```
