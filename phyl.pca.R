@@ -1,0 +1,8 @@
+library(phytools)
+sativatree <- read.tree("/data/01/user109/map-sativa/NC_change_sativa132/niche/r8s.84species-lowcop.newtime-smooth_100.out.timetree.rename.prune.reverse_order.Medicago_niche.newick")
+sativa.data <- read.table("niche.txt")
+sativa.pca<-phyl.pca(sativatree,sativa.data)
+scores(sativa.pca)
+print(sativa.pca)
+plot(sativa.pca)
+bioplot(sativa.pca)
