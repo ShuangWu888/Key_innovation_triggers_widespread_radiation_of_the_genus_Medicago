@@ -133,3 +133,10 @@ bamm -c BAMM_traitcontrol.txt
 singularity exec -B /data /data/00/user/user109/software/RevBayes/ rb mcmc_HiSSE.Rev.txt
 ```
 
+## Reconstruction of ancestral niches for annual and perennial Medicago species
+[RevBayes](https://revbayes.github.io/tutorials/)
+
+```
+singularity exec -B /data /data/00/user/user109/software/RevBayes/ rb niche.charactor.rev.txt
+```
+
