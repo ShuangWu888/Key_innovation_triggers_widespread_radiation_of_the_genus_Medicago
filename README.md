@@ -1,7 +1,5 @@
 # Key_innovation_triggers_widespread_radiation_of_the_genus_Medicago
 
-Key innovation triggers widespread radiation of the genus Medicago
-
 ## Genotype calling
 Mapped clean reads onto the Medicago sativa subsp. caerulea (voucher PI464715) reference genome using BWA
 ```
@@ -79,6 +77,7 @@ raxmlHPC-PTHREADS -s z131-70_cp_cds-half_gap.fasta -n z131-70_cp_cds-half_gap.fa
 
 ## Divergence time estimation
 [r8s](https://sourceforge.net/projects/r8s/)
+
 [RelTime method in MEGA X](https://academic.oup.com/mbe/article/35/9/2334/5042667?login=false)
 
 ## Ancestral area reconstruction
