@@ -114,3 +114,10 @@ bamm -c BAMM_divcontrol.txt
 bamm -c BAMM_traitcontrol.txt
 ```
 
+### Niche rate estimation
+
+#### Ordinated all 35 environmental variables using phylogenetic principal component analysis (PCA) implemented in the “phyl.pca” function of [phytools](https://github.com/liamrevell/phytools) package
+```
+Rscript phyl.pca.R
+```
+
