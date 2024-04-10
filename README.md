@@ -57,12 +57,13 @@ Annotation
 ```
 iqtree2 -s iqtree_DP_6-50_miss_0.2_sativa132_SNP.varsites.phy -st DNA -m GTR+ASC -B 1000 --bnni --prefix iqtree_DP_6-50_miss_0.2_sativa132_BS_SNP -T 50
 ```
-#### The concatenated method
+#### For the concatenated CDS alignment of 7,990 single copy nuclear genes
+##### The concatenated method
 [RaxML](https://github.com/stamatak/standard-RAxML)
 ```
 raxmlHPC-PTHREADS -s merge.cds.codon123.fa -n merge.cds.codon123.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
 ```
-#### The coalescent method
+##### The coalescent method
 Reconstructed phylogenetic trees of each single copy nuclear gene using RAxML
 ```
 raxmlHPC-PTHREADS -s MsaG000053.cds.nonmiss.fa -n MsaG000053.cds.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
