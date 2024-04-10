@@ -29,3 +29,13 @@ Used a custom script to identification of single copy genes
 ```
 perl identify_single_copy_gene.132sativa.pl
 ```
+
+## Plastomes assembly and annotation
+Assembly
+[NOVOPlasty3.8.3](https://github.com/ndierckx/NOVOPlasty)
+```
+perl NOVOPlasty3.8.3.pl -c config.txt
+```
+Annotation
+[GeSeq](https://chlorobox.mpimp-golm.mpg.de/geseq.html)
+[Geneious v.10.2.6](https://www.geneious.com/)
