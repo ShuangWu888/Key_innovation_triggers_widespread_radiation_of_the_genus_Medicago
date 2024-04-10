@@ -66,7 +66,7 @@ Reconstructed phylogenetic trees of each single copy nuclear gene using RAxML
 ```
 raxmlHPC-PTHREADS -s MsaG000053.cds.nonmiss.fa -n MsaG000053.cds.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
 ```
-Estimated a coalescent tree using ASTRAL69 v.5.6.3
+Estimated a coalescent tree using ASTRAL v.5.6.3
 ```
 java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.tree.BS10.tre -o 4.arstral.CDS.tree.BS10.individual.tre 2>4.arstral.CDS.tree.BS10.individual.tre.log
 ```
@@ -140,3 +140,30 @@ singularity exec -B /data /data/00/user/user109/software/RevBayes/ rb mcmc_HiSSE
 singularity exec -B /data /data/00/user/user109/software/RevBayes/ rb niche.charactor.rev.txt
 ```
 
+## ILS simulation, hybridization inference, and admixture analysis
+### Simplified phylogenetic trees (nuclear genome and plastome)
+Selected one individual from each subclade (M1-M18) as a representative and reconstructed phylogenetic trees with Vicia sativa (DRR053677) as an outgroup
+#### For nuclear genome
+##### Used the concatenation method of RAxML based on the CDS dataset of 7,990 single copy nuclear genes
+```
+raxmlHPC-PTHREADS -s merge.cds.codon123.fa -n merge.cds.codon123.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
+```
+##### Used the coalescent method of ASTRAL based on the CDS dataset of 7,990 single copy nuclear genes
+Reconstructed phylogenetic trees of each single copy nuclear gene using RAxML
+```
+raxmlHPC-PTHREADS -s MsaG000053.cds.nonmiss.fa -n MsaG000053.cds.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
+```
+Estimated a coalescent tree using ASTRAL v.5.6.3
+```
+java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.tree.BS10.tre -o 4.arstral.CDS.tree.BS10.individual.tre 2>4.arstral.CDS.tree.BS10.individual.tre.log
+```
+#### For plastome
+```
+raxmlHPC-PTHREADS -s z19-70_cp_cds-half_gap.fa -n z19-70_cp_cds-half_gap.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 15
+```
+
+### ILS simulation
+#### Simulated 200,000 gene trees using the multispecies coalescent model of [Phybase](https://github.com/lliu1871/phybase) v.1.5 using the ASTRAL tree
+```
+Rscript phybase.R
+```
