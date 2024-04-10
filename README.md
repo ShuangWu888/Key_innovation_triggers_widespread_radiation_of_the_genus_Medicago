@@ -167,7 +167,7 @@ raxmlHPC-PTHREADS -s z19-70_cp_cds-half_gap.fa -n z19-70_cp_cds-half_gap.fa -m G
 ```
 Rscript phybase.R
 ```
-#### Calculated gene-tree quartet frequencies of the five incongruent internal nodes in observed and simulated datasets using Twisst
+#### Calculated gene-tree quartet frequencies of the five incongruent internal nodes in observed and simulated datasets using [Twisst](https://github.com/simonhmartin/twisst)
 ##### Observed dataset
 ```
 python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node1.weights -g A M5 -g B M4 -g C M9 -g D M6
