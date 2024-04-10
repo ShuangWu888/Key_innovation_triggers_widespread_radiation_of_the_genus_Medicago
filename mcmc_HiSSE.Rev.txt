@@ -25,11 +25,11 @@ NUM_STATES            = 2
 NUM_HIDDEN            = 4
 NUM_RATES             = NUM_STATES * NUM_HIDDEN
 H                     = 0.587405
-DATASET               = "coil_adjust_no_initialize_1w"
+DATASET               = "spiral_pods"
 
 # Read in the observed phylogeny
 observed_phylogeny <- readTrees("/data/01/user109/map-sativa/NC_change_sativa132/key_innovation/r8s.84species-lowcop.newtime-smooth_100.out.timetree.rename.prune.reverse_order.Medicago.rename.nex")[1]
-data <- readCharacterData("/data/01/user109/map-sativa/NC_change_sativa132/key_innovation/coil_adjust")
+data <- readCharacterData("/data/01/user109/map-sativa/NC_change_sativa132/key_innovation/spiral_pods")
 
 # we need to expand the data to the hidden states
 data_exp <- data.expandCharacters( NUM_HIDDEN )
