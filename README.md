@@ -77,3 +77,8 @@ java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.tree.BS10.tre -o 4.arstral.
 raxmlHPC-PTHREADS -s z131-70_cp_cds-half_gap.fasta -n z131-70_cp_cds-half_gap.fasta -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
 ```
 
+## Divergence time estimation
+[r8s](https://sourceforge.net/projects/r8s/)
+[RelTime method in MEGA X](https://academic.oup.com/mbe/article/35/9/2334/5042667?login=false)
+
+## Ancestral area reconstruction
