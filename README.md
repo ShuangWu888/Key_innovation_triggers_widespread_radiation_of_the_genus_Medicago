@@ -126,3 +126,10 @@ Rscript phyl.pca.R
 bamm -c BAMM_traitcontrol.txt
 ```
 
+## Key innovation test
+[HiSSE analysis in RevBayes](https://revbayes.github.io/tutorials/sse/hisse.html)
+
+```
+singularity exec -B /data /data/00/user/user109/software/RevBayes/ rb mcmc_HiSSE.Rev.txt
+```
+
