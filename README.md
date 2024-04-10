@@ -81,3 +81,11 @@ raxmlHPC-PTHREADS -s z131-70_cp_cds-half_gap.fasta -n z131-70_cp_cds-half_gap.fa
 [RelTime method in MEGA X](https://academic.oup.com/mbe/article/35/9/2334/5042667?login=false)
 
 ## Ancestral area reconstruction
+Reconstructed ancestral distributions
+```
+Rscript M0_sativa-origin_maxareas6.R
+```
+Used biogeographic stochastic mapping (BSM) to calculate the type and number of biogeographical events
+```
+Rscript sativa-origin_BAYAREALIKE+J_BSM_maxareas6.R
+```
