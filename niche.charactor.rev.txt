@@ -32,11 +32,11 @@ calib = FALSE #Whether to calibrate or not
 #Must provide the complete path or the path from the directory where RevBayes is installed
 
 #Input files
-contDataFile = "bio1.nex" #Nexus file with continuous trait data
+contDataFile = "niche.nex" #Nexus file with continuous trait data
 cladeDataFile = "cladeData.nex" #Nexus file of type=standard with 1 character coded as: 1 for tips inside the special clade and 0 for others
 treeFile = "niche-biotype.index.nex" #Guide tree file (in NEXUS or newick format)
 #Output folder
-outFolder="bio1-index"
+outFolder="niche-index"
 ###########
 
 
