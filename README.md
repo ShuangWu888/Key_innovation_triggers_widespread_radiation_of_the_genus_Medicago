@@ -92,3 +92,10 @@ Rscript sativa-origin_BAYAREALIKE+J_BSM_maxareas6.R
 
 ## Ancestral character reconstruction
 [Mesquite](https://www.mesquiteproject.org/)
+
+## Macroevolutionary rate estimation
+### Diversification rates estimation
+#### Fit a series of time-dependent likelihood diversification models for Medicago using [RPANDA](https://github.com/hmorlon/PANDA/tree/master) v.1.9
+```
+Rscript RPANDA-time.R
+```
