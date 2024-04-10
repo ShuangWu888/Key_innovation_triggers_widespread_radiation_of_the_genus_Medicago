@@ -163,7 +163,7 @@ raxmlHPC-PTHREADS -s z19-70_cp_cds-half_gap.fa -n z19-70_cp_cds-half_gap.fa -m G
 ```
 
 ### ILS simulation
-#### Simulated 10,000 gene trees using the multispecies coalescent model of [Phybase](https://github.com/lliu1871/phybase) v.1.5 using the ASTRAL tree
+#### Simulated 10,000 gene trees using the multispecies coalescent model of [Phybase](https://github.com/lliu1871/phybase) using the ASTRAL tree
 ```
 Rscript phybase.R
 ```
