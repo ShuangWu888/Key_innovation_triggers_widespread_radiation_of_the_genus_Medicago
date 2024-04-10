@@ -60,15 +60,24 @@ iqtree2 -s iqtree_DP_6-50_miss_0.2_sativa132_SNP.varsites.phy -st DNA -m GTR+ASC
 [RaxML](https://github.com/stamatak/standard-RAxML)
 ```
 raxmlHPC-PTHREADS -s merge.cds.codon123.fa -n merge.cds.codon123.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
+raxmlHPC-PTHREADS -s merge.cds.codon12.fa -n merge.cds.codon12.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
+raxmlHPC-PTHREADS -s merge.cds.codon3.fa -n merge.cds.codon3.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
+raxmlHPC-PTHREADS -s merge.cds.4Dsites.fa -n merge.cds.4Dsites.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
 ```
 ##### The coalescent method
 Reconstructed phylogenetic trees of each single copy nuclear gene using RAxML
 ```
-raxmlHPC-PTHREADS -s MsaG000053.cds.nonmiss.fa -n MsaG000053.cds.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
+raxmlHPC-PTHREADS -s gene.cds.codon123.nonmiss.fa -n gene.cds.codon123.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
+raxmlHPC-PTHREADS -s gene.cds.codon12.nonmiss.fa -n gene.cds.codon12.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
+raxmlHPC-PTHREADS -s gene.cds.codon3.nonmiss.fa -n gene.cds.codon3.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
+raxmlHPC-PTHREADS -s gene.cds.4Dsites.nonmiss.fa -n gene.cds.4Dsites.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
 ```
 Estimated a coalescent tree using ASTRAL v.5.6.3
 ```
-java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.tree.BS10.tre -o 4.arstral.CDS.tree.BS10.individual.tre 2>4.arstral.CDS.tree.BS10.individual.tre.log
+java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.codon123.tree.BS10.tre -o 4.arstral.CDS.codon123.tree.BS10.individual.tre 2>4.arstral.CDS.codon123.tree.BS10.individual.tre.log
+java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.codon12.tree.BS10.tre -o 4.arstral.CDS.codon12.tree.BS10.individual.tre 2>4.arstral.CDS.codon12.tree.BS10.individual.tre.log
+java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.codon3.tree.BS10.tre -o 4.arstral.CDS.codon3.tree.BS10.individual.tre 2>4.arstral.CDS.codon3.tree.BS10.individual.tre.log
+java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.4Dsites.tree.BS10.tre -o 4.arstral.CDS.4Dsites.tree.BS10.individual.tre 2>4.arstral.CDS.4Dsites.tree.BS10.individual.tre.log
 ```
 ### Plastome
 ```
@@ -151,11 +160,11 @@ raxmlHPC-PTHREADS -s merge.cds.codon123.fa -n merge.cds.codon123.fa -m GTRCAT -f
 ##### Used the coalescent method of ASTRAL based on the CDS dataset of 7,990 single copy nuclear genes
 Reconstructed phylogenetic trees of each single copy nuclear gene using RAxML
 ```
-raxmlHPC-PTHREADS -s MsaG000053.cds.nonmiss.fa -n MsaG000053.cds.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
+raxmlHPC-PTHREADS -s gene.cds.codon123.nonmiss.fa -n gene.cds.codon123.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
 ```
 Estimated a coalescent tree using ASTRAL v.5.6.3
 ```
-java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.tree.BS10.tre -o 4.arstral.CDS.tree.BS10.individual.tre 2>4.arstral.CDS.tree.BS10.individual.tre.log
+java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.codon123.tree.BS10.tre -o 4.arstral.CDS.codon123.tree.BS10.individual.tre 2>4.arstral.CDS.codon123.tree.BS10.individual.tre.log
 ```
 #### For plastome
 ```
