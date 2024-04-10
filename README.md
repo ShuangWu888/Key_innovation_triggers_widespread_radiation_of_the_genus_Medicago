@@ -14,3 +14,12 @@ java -Xmx10g -jar gatk-package-4.1.4.1-local.jar HaplotypeCaller -R reference.fa
 # Filtered SNPs
 vcftools --gzvcf rm_indel_5bp.sativa132.SNP.vcf.gz --minDP 6 --maxDP 50 --minGQ 20 --max-missing 0.8 --recode --recode-INFO-all --stdout | gzip -c > DP_6-50_miss_0.2_sativa132.SNP.vcf.gz
 ```
+
+## Identification of single copy genes
+
+```
+# Coverage statistical analysis for each nuclear gene
+java -jar bamstats05.jar -B reference.gff.CDS.bed sample.dedup.bam | gzip -c > 02.bed_cov.pl.out/sample.bed_cov.gz
+# Used a custom script to identification of single copy genes
+perl identify_single_copy_gene.132sativa.pl
+```
