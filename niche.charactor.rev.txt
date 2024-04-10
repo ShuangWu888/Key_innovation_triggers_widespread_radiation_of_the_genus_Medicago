@@ -1,0 +1,299 @@
+#RevBayes script running the Bayesian analysis of trait evolution
+
+clear()
+
+#######################################################################################
+######################## PARAMETERS OF ANALYSIS #######################################
+#######################################################################################
+
+#Name of analysis
+ANALYSIS_NAME = "sativa_niche"
+
+###########
+# DEFINE THE MODEL
+###########
+#Type of analysis (options)
+exponential_relaxed_rate = TRUE #Should each branch have its own rate ? 
+v = 1 #Index of the continuous trait variable to consider in the file
+#v = v + 8 #The 8 first columns are the min-max data: skip them
+dataset <- 1
+
+#Hyperparameters
+sigmaMeanMean <- 10.0 #Mean of the exponential prior for the average sigma
+rootMean <- 0.0 #Mean of the Normal prior for the trait value of the root
+rootVar <- 10.0 #SD of the Normal prior for the trait value of the root
+calib = FALSE #Whether to calibrate or not
+###########
+
+
+###########
+# FILE PARAMETERS
+###########
+#Must provide the complete path or the path from the directory where RevBayes is installed
+
+#Input files
+contDataFile = "bio1.nex" #Nexus file with continuous trait data
+cladeDataFile = "cladeData.nex" #Nexus file of type=standard with 1 character coded as: 1 for tips inside the special clade and 0 for others
+treeFile = "niche-biotype.index.nex" #Guide tree file (in NEXUS or newick format)
+#Output folder
+outFolder="bio1-index"
+###########
+
+
+###########
+# MCMC PARAMETERS
+###########
+
+#Parameters for the main MCMC chain
+nruns = 1 #Number of independent MCMC chains (I do always 1 so that the burnin and adaptation phases are repeated for each run)
+warmup = 5000 #Number of generations to carry out warmup (pre-burnin period where
+                 # RevBayes will automatically tune the parameters of the MCMC)
+burnin = 10000 #Number of generations (including warmup) to discard as burnin
+                  #Must be >= warmump
+sample = 100000 #Number of generations (excluding burnin and warmup) to keep after burnin
+thin = 10 #Save every thin-th generation
+screenPrint = 1000 #Print to screen every screenPrint-th generation
+
+#Initial values for MCMC tuning parameters, and whether to auto-tune
+delta_traits = 1.5
+delta_root = 5
+tune_traits = TRUE
+lambda_sigma = 5
+tune_sigma = TRUE
+lambda_sigmaOU = 1.5
+tune_sigmaOU = TRUE
+###########
+
+#######################################################################################
+
+
+#######################################################################################
+######################## READ THE DATA  ###############################################
+#######################################################################################
+
+#contData is the tip traits 
+contData <- readContinuousCharacterData(contDataFile)
+#cladeData is 1 for Hypericum tips and 0 otherwise. This is used to identify the Hypericum clade and position the calibration on the stem Hypericum branch.
+cladeData <- readContinuousCharacterData(cladeDataFile)
+
+#Read the tree in
+treeArray <- readTrees(treeFile)
+psi <- treeArray[1]
+
+#Get the calibration value from contData (taxon that has name "fossil") 
+#calib_value <- contData.getTaxon("fossil")[v] #The trait value for the calibrated branch
+#######################################################################################
+
+
+#######################################################################################
+######## GET INFO ABOUT THE TREE AND THE LOCATION OF THE SPECIAL CLADE ################
+#######################################################################################
+
+#The useful variables produced by this section are:
+	# MRCA, which contains the branch index for the stem Hypericum (to calibrate)
+	# branches_subtree_unique, which contains the branch indices of all the Hypericum branches. Deprecated now, formerly used to assign a different model to Hypericum.
+
+
+#Tree variables of use
+numNodes = psi.nnodes() #Number of nodes (including tips)
+numTips = psi.ntips() #Number of tips
+
+#Get the indices of taxa in the special clade in psi.names():
+   #If subtree_tips_indices[i] = j then cladeData[j] is for taxon psi.names()[i]
+ind = 0
+for(i in 1:numTips){
+if(abs(cladeData[cladeData.taxonIndex(psi.nodeName(i))][1]) == 1) subtree_tips_indices[++ind] = i
+}
+
+#For each tip in the special clade get the indices of all ancestors in psi
+for(j in 1:subtree_tips_indices.size()){
+   
+   continue = TRUE
+   count = 1
+   i = subtree_tips_indices[j]
+   while(continue){
+      par = psi.parent(i)
+      ancestors[j][count] = par
+      count = count + 1
+      i = par
+      if(psi.isRoot(par)){
+         continue = FALSE
+      }
+   }
+}
+
+#Find the index in psi of the MRCA of the special clade
+continue = TRUE
+count = ancestors[1].size()
+MRCA = ancestors[1][count]
+while(continue){
+   MRCA2 = ancestors[1][count-1]
+   for(i in 1:(ancestors.size()-1)){
+      isThere[i] = 0
+      for(j in 1:ancestors[i+1].size()){
+         if(ancestors[i+1][j] == MRCA2) isThere[i] = 1
+      }
+   }
+   if(sum(isThere)== (ancestors.size()-1)){
+      MRCA = MRCA2
+      count = count-1
+   } else{
+      continue = FALSE
+   }
+}
+
+#Find the indices in psi of all branches comprised in the special clade
+ind = 0
+for(i in 1:subtree_tips_indices.size()){
+   continue = TRUE
+   cur = subtree_tips_indices[i]
+   while(continue){
+      par = psi.parent(cur)
+      branches_subtree[++ind] = par
+      if(par == MRCA) continue = FALSE
+      cur = par
+   }
+}
+#clear(branches_subtree_unique)
+branches_subtree_unique[1] = branches_subtree[1]
+ind = 1
+for(i in 2:branches_subtree.size()){
+   include = TRUE
+      for(j in 1:branches_subtree_unique.size()){
+         if(branches_subtree_unique[j] == branches_subtree[i]){
+         include = FALSE
+         }
+      }
+   if(include) {branches_subtree_unique[++ind] = branches_subtree[i]}
+}
+nBranches = branches_subtree_unique.size()
+for(i in 1:subtree_tips_indices.size()){
+branches_subtree_unique[i + nBranches] = subtree_tips_indices[i]
+}
+
+#######################################################################################
+
+
+
+#######################################################################################
+################################ THE MODEL ############################################
+#######################################################################################
+
+#Initialize moves index
+mvi = 0
+
+#############
+# CALIBRATION
+#############
+#Get info on the calibration branch
+calibration_node_index = MRCA
+calib_branchLength <- psi.branchLength(calibration_node_index)
+calib_end_age <- psi.nodeAge(calibration_node_index)
+calib_start_age := calib_end_age + calib_branchLength
+
+# Uniform prior: the observed fossil could be anywhere along the stem branch with equal probability
+calib_age ~ dnUniform(calib_end_age, calib_start_age)
+moves[++mvi] = mvSlide(calib_age,delta=20, tune=true,weight=2)
+bef_calib_branchLength := calib_start_age - calib_age
+aft_calib_branchLength := calib_age - calib_end_age
+#############
+
+
+#############
+# AVERAGE SIGMA
+#############
+# sigmaMeanOU1 is the average of the branch-specific rates.
+# sigmaMeanOU1 receives an exponential prior with mean sigmaMeanMean   
+sigmaMeanOU1 ~ dnExp(1/sigmaMeanMean)
+moves[++mvi] = mvScale(sigmaMeanOU1, lambda=lambda_sigmaOU, tune=tune_sigmaOU, weight=10.0)
+#############
+
+
+#############
+# ALONG THE TREE
+#############
+
+#Each branch's rate follows an exponential distribution of mean sigmaMeanOU1
+for (i in (numNodes-1):1 ){
+   sigma[i] ~ dnExp(1/sigmaMeanOU1)
+   sigma[i].setValue(rUniform(1,0,5)[1])
+   moves[++mvi] = mvScale(sigma[i], lambda=lambda_sigma, tune=tune_sigma, weight=4)   
+}
+
+# The trait values for all nodes and tips will be stored in the vector trait
+
+# The root value receives a normal prior
+trait[numNodes] ~ dnNormal(rootMean,rootVar)
+trait[numNodes].setValue(rUniform(1,-3.0,3.0)[1])
+moves[++mvi] = mvSlide(trait[numNodes], delta=delta_root, tune=tune_traits,weight=4)
+
+
+# Calculate the Brownian probability from the root until reaching the calibration branch
+for (i in (numNodes-1):(calibration_node_index+1) ){ 
+   trait[i] ~ dnNormal( trait[psi.parent(i)], sd=sigma[i]*sqrt(psi.branchLength(i) ))      
+   trait[i].setValue(rUniform(1,-3.0,3.0)[1])
+   moves[++mvi] = mvSlide( trait[i], delta=delta_traits, tune=tune_traits ,weight=4) 
+}
+
+
+# Calculate the Brownian probability for the calibration branch
+b = calibration_node_index
+trait_calib ~ dnNormal( trait[psi.parent(b)], sd=sigma[b]*sqrt(abs(bef_calib_branchLength) ))
+if(calib) {
+   trait_calib.clamp(calib_value)
+} else{
+   moves[++mvi] = mvSlide(trait_calib, delta=delta_traits, tune=tune_traits, weight=4)
+}
+trait[b] ~ dnNormal( trait_calib, sd=sigma[b]*sqrt(abs(aft_calib_branchLength) ))
+trait[b].setValue(rUniform(1,-3.0,3.0)[1])
+moves[++mvi] = mvSlide( trait[b], delta=delta_traits, tune=tune_traits ,weight=4)
+
+
+# Calculate the Brownian probability for the remaining nodes
+for (i in (calibration_node_index-1):(numTips+1) ){
+   trait[i] ~ dnNormal( trait[psi.parent(i)], sd=sigma[i]*sqrt(psi.branchLength(i) ))      
+   trait[i].setValue(rUniform(1,-3.0,3.0)[1])
+   moves[++mvi] = mvSlide( trait[i], delta=delta_traits, tune=tune_traits ,weight=4) 
+}
+
+# Calculate the Brownian likelihood for the tips
+for (i in numTips:1 ){ 
+      trait[i] ~ dnNormal( trait[psi.parent(i)], sd=sigma[i]*sqrt(psi.branchLength(i) ))      
+      trait[i].clamp(contData.getTaxon(psi.nodeName(i))[v])
+}
+
+
+#Define the model
+mymodel = model(sigma)
+#############
+
+#######################################################################################
+
+
+#######################################################################################
+######################## SAVING AND MCMC ##############################################
+#######################################################################################
+
+##
+#Prepare output file names
+#v2 = v - 8
+NAME = ANALYSIS_NAME + "_V."
+   
+#Output of MCMC analysis
+logFile = outFolder + NAME + ".log.txt" #Output log file
+
+
+#Draw sample from the posterior
+monitors[1] = mnScreen(printgen=screenPrint)
+monitors[2] = mnModel(filename=logFile, printgen=thin, separator = TAB)
+
+mymcmc = mcmc(mymodel, monitors, moves, nruns=nruns)
+mymcmc.burnin(generations=burnin,tuningInterval=warmup)
+mymcmc.run(sample)
+
+#######################################################################################
+#######################################################################################
+#######################################################################################
+#######################################################################################
+
+
