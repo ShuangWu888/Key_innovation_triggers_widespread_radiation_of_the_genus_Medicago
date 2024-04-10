@@ -19,7 +19,7 @@ modeltype = trait
 treefile = r8s.84species-lowcop.newtime-smooth_100.out.timetree.rename.prune.reverse_order.newick
 # File name of the phylogenetic tree to be analyzed
 
-traitfile = shape_coil.txt
+traitfile = trait.txt
 # File name of the phenotypic traits file
 
 runInfoFilename = run_info.txt
