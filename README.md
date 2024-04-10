@@ -39,8 +39,15 @@ Assembly
 perl NOVOPlasty3.8.3.pl -c config.txt
 ```
 
+[GetOrganelle](https://github.com/Kinggerm/GetOrganelle)
+
+```
+get_organelle_from_reads.py -1 sample_1_clean.fq.gz -2 sample_2_clean.fq.gz -t 10 -o sample.plastome -F embplant_pt -R 10
+```
+
 Annotation
 
 [GeSeq](https://chlorobox.mpimp-golm.mpg.de/geseq.html)
 
 [Geneious v.10.2.6](https://www.geneious.com/)
+
