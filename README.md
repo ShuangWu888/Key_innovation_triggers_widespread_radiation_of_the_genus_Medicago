@@ -121,3 +121,8 @@ bamm -c BAMM_traitcontrol.txt
 Rscript phyl.pca.R
 ```
 
+#### Used the trait model of [BAMM](https://github.com/macroevolution/bamm/tree/master) on the first axis of the phylogenetic PCA of the niche data
+```
+bamm -c BAMM_traitcontrol.txt
+```
+
