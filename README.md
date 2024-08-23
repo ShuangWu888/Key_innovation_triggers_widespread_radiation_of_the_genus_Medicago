@@ -28,6 +28,10 @@ Used a custom script to identification of single copy genes
 perl identify_single_copy_gene.132sativa.pl
 ```
 
+## Sequence recovery and assembly of nuclear genes for each individual
+[HybPiper](https://github.com/mossmatters/HybPiper)
+https://github.com/baileyp1/PhylogenomicsPipelines
+
 ## Plastomes assembly and annotation
 ### Assembly
 
@@ -78,6 +82,11 @@ java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.codon123.tree.BS10.tre -o 4
 java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.codon12.tree.BS10.tre -o 4.arstral.CDS.codon12.tree.BS10.individual.tre 2>4.arstral.CDS.codon12.tree.BS10.individual.tre.log
 java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.codon3.tree.BS10.tre -o 4.arstral.CDS.codon3.tree.BS10.individual.tre 2>4.arstral.CDS.codon3.tree.BS10.individual.tre.log
 java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.4Dsites.tree.BS10.tre -o 4.arstral.CDS.4Dsites.tree.BS10.individual.tre 2>4.arstral.CDS.4Dsites.tree.BS10.individual.tre.log
+```
+### 353 nuclear genes
+```
+raxmlHPC-PTHREADS -s 353-filt0.6.fasta -n 353-filt0.6.fasta -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
+raxmlHPC-PTHREADS -s 353-filt0.7.fasta -n 353-filt0.7.fasta -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
 ```
 ### Plastome
 ```
