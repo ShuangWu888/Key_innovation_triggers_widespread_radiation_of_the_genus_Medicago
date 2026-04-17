@@ -122,7 +122,7 @@ java -Xmx150G -jar /home/share/users/wushuang2019/software/Astral/astral.5.6.3.j
 raxmlHPC-PTHREADS -s species-70_cp_cds-half_gap.fasta -n species-70_cp_cds-half_gap.fasta -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
 ```
 ### Ancestral character reconstruction
-[Mesquite](https://www.mesquiteproject.org/)(Input files: Species tree, Trait file)
+[Mesquite] (https://www.mesquiteproject.org/)(Input files: Species tree, Trait file)
 
 ## Macroevolutionary rate estimation
 ### Diversification rates estimation
