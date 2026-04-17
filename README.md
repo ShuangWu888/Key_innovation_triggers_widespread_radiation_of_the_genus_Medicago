@@ -275,12 +275,12 @@ python twisst.py -t simulated.reroot.order.tree -w simulated.node5.weights -g A 
 ```
 angsd -doAbbababa 1 -bam 00.medicago.bam.list -doCounts 1 -useLast 1 -rf 55medicago.chr.txt -out 55medicago.abbababa
 ```
-
-#### fb(C) statistic
-
 ```
 Rscript jackKnife.R file=55medicago.abbababa indNames=00.55medicago.reads.list outfile=55medicago_ABBA_result
 ```
+
+#### fb(C) statistic
+
 fb(C) =medianA[minB [f(A,B;C,O)]]
 
 Note that negative f scores, i.e. those where A and C share excess alleles relative to B, are set to zero in this calculation
