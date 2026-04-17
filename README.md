@@ -105,7 +105,7 @@ java -Xmx150G -jar /home/share/users/wushuang2019/software/Astral/astral.5.6.3.j
 r8s -f r8s.84species.timetree5.ctl -b > r8s.84species.timetree5.smooth_100.out
 ```
 #### r8s: Bootstrap confidence intervals on parameters
-[r8s manual.pdf: Bootstrap confidence intervals on parameters (page 25)](https://naturalis.github.io/mebioda/doc/week1/w1d5/r8s1.7.manual.pdf)
+[r8s manual.pdf](https://naturalis.github.io/mebioda/doc/week1/w1d5/r8s1.7.manual.pdf): Bootstrap confidence intervals on parameters (page 25)
 ### RelTime
 [RelTime method in MEGA X](https://academic.oup.com/mbe/article/35/9/2334/5042667?login=false)
 
