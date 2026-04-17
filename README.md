@@ -35,23 +35,16 @@ https://github.com/baileyp1/PhylogenomicsPipelines
 
 ## Plastomes assembly and annotation
 ### Assembly
-
 [NOVOPlasty3.8.3](https://github.com/ndierckx/NOVOPlasty)
-
 ```
 perl NOVOPlasty3.8.3.pl -c config.txt
 ```
-
 [GetOrganelle](https://github.com/Kinggerm/GetOrganelle)
-
 ```
 get_organelle_from_reads.py -1 sample_1_clean.fq.gz -2 sample_2_clean.fq.gz -t 10 -o sample.plastome -F embplant_pt -R 10
 ```
-
 ### Annotation
-
 [GeSeq](https://chlorobox.mpimp-golm.mpg.de/geseq.html)
-
 [Geneious v.10.2.6](https://www.geneious.com/)
 
 ## Phylogenomic analysis
@@ -132,9 +125,7 @@ raxmlHPC-PTHREADS -s species-70_cp_cds-half_gap.fasta -n species-70_cp_cds-half_
 [Mesquite](https://www.mesquiteproject.org/)(Input files: Species tree, Trait file)
 
 ## Macroevolutionary rate estimation
-
 ### Diversification rates estimation
-
 #### Fit a series of time-dependent likelihood diversification models for Medicago using [RPANDA](https://github.com/hmorlon/PANDA/tree/master)
 ```
 Rscript RPANDA-time.R
@@ -143,22 +134,16 @@ Rscript RPANDA-time.R
 ```
 bamm -c BAMM_divcontrol.txt
 ```
-
 ### Traits rates estimation
-
 [BAMM](https://github.com/macroevolution/bamm/tree/master)
-
 ```
 bamm -c BAMM_traitcontrol.txt
 ```
-
 ### Niche rate estimation
-
 #### Ordinated all 35 environmental variables using phylogenetic principal component analysis (PCA) implemented in the “phyl.pca” function of [phytools](https://github.com/liamrevell/phytools) package
 ```
 Rscript phyl.pca.R
 ```
-
 #### Used the trait model of [BAMM](https://github.com/macroevolution/bamm/tree/master) on the first axis of the phylogenetic PCA of the niche data
 ```
 bamm -c BAMM_traitcontrol.txt
@@ -166,14 +151,11 @@ bamm -c BAMM_traitcontrol.txt
 
 ## Key innovation test
 [HiSSE analysis in RevBayes](https://revbayes.github.io/tutorials/sse/hisse.html)
-
 ```
 singularity exec -B /data /data/00/user/user109/software/RevBayes/ rb mcmc_HiSSE.Rev.txt
 ```
-
 ## Reconstruction of ancestral niches for annual and perennial Medicago species
 [RevBayes](https://revbayes.github.io/tutorials/)
-
 ```
 singularity exec -B /data /data/00/user/user109/software/RevBayes/ rb niche.charactor.rev.txt
 ```
@@ -199,7 +181,6 @@ java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.codon123.tree.BS10.tre -o 4
 ```
 raxmlHPC-PTHREADS -s z19-70_cp_cds-half_gap.fa -n z19-70_cp_cds-half_gap.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 15
 ```
-
 ### ILS simulation
 #### Simulated 10,000 gene trees using the multispecies coalescent model of [Phybase](https://github.com/lliu1871/phybase) using the ASTRAL tree
 ```
@@ -222,7 +203,6 @@ python twisst.py -t simulated.reroot.order.tree -w simulated.node3.weights -g A 
 python twisst.py -t simulated.reroot.order.tree -w simulated.node4.weights -g A M13 -g B M12 -g C M15 -g D M18
 python twisst.py -t simulated.reroot.order.tree -w simulated.node5.weights -g A M17 -g B M16 -g C M15 -g D M18
 ```
-
 ### Hybridization inference
 #### D-statistics
 ```
