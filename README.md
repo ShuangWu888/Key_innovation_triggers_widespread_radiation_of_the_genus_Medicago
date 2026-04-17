@@ -69,7 +69,7 @@ raxmlHPC-PTHREADS -s merge.cds.codon12.fa -n merge.cds.codon12.fa -m GTRCAT -f a
 raxmlHPC-PTHREADS -s merge.cds.codon3.fa -n merge.cds.codon3.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
 raxmlHPC-PTHREADS -s merge.cds.4Dsites.fa -n merge.cds.4Dsites.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
 ```
-##### The coalescent method
+##### The gene tree-based method
 Reconstructed phylogenetic trees of each single copy nuclear gene using RAxML
 ```
 raxmlHPC-PTHREADS -s gene.cds.codon123.nonmiss.fa -n gene.cds.codon123.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
@@ -77,7 +77,7 @@ raxmlHPC-PTHREADS -s gene.cds.codon12.nonmiss.fa -n gene.cds.codon12.nonmiss.fa 
 raxmlHPC-PTHREADS -s gene.cds.codon3.nonmiss.fa -n gene.cds.codon3.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
 raxmlHPC-PTHREADS -s gene.cds.4Dsites.nonmiss.fa -n gene.cds.4Dsites.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
 ```
-Estimated a coalescent tree using ASTRAL v.5.6.3
+Estimated a species tree using ASTRAL v.5.6.3
 ```
 java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.codon123.tree.BS10.tre -o 4.arstral.CDS.codon123.tree.BS10.individual.tre 2>4.arstral.CDS.codon123.tree.BS10.individual.tre.log
 java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.codon12.tree.BS10.tre -o 4.arstral.CDS.codon12.tree.BS10.individual.tre 2>4.arstral.CDS.codon12.tree.BS10.individual.tre.log
@@ -95,17 +95,18 @@ raxmlHPC-PTHREADS -s z131-70_cp_cds-half_gap.fasta -n z131-70_cp_cds-half_gap.fa
 ```
 
 ## Divergence time estimation
-### To estimate divergence times, we reconstructed a species tree using one individual from each species based on the concatenated CDS alignment of 7,990 single copy nuclear genes
+### To estimate divergence times, we reconstructed a species tree using the “-a” option in ASTRAL v.5.6.3 based on the 7,990 single-copy gene dataset
 ```
-raxmlHPC-PTHREADS -s merge.cds.codon123.84species.fa -n merge.cds.codon123.84species.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
+java -Xmx150G -jar /home/share/users/wushuang2019/software/Astral/astral.5.6.3.jar -i 3.arstral.CDS.codon123.tree.BS10.tre -o 4.arstral.CDS.codon123.tree.BS10.species.tre -a order.rename.txt 2>4.arstral.CDS.codon123.tree.BS10.species.tre.log
 ```
-
+### r8s
 [r8s](https://sourceforge.net/projects/r8s/)
-
 ```
 r8s -f r8s.84species.timetree5.ctl -b > r8s.84species.timetree5.smooth_100.out
 ```
-
+#### r8s: Bootstrap confidence intervals on parameters
+[r8s manual.pdf: Bootstrap confidence intervals on parameters](page 25)(extension://ngbkcglbmlglgldjfcnhaijeecaccgfi/https://naturalis.github.io/mebioda/doc/week1/w1d5/r8s1.7.manual.pdf)
+### RelTime
 [RelTime method in MEGA X](https://academic.oup.com/mbe/article/35/9/2334/5042667?login=false)
 
 ## Ancestral area reconstruction
@@ -119,7 +120,16 @@ Rscript sativa-origin_BAYAREALIKE+J_BSM_maxareas6.R
 ```
 
 ## Ancestral character reconstruction
-[Mesquite](https://www.mesquiteproject.org/)
+### nuclear genome (reconstructed a species tree using the “-a” option in ASTRAL v.5.6.3 based on the 7,990 single-copy gene dataset)
+```
+java -Xmx150G -jar /home/share/users/wushuang2019/software/Astral/astral.5.6.3.jar -i 3.arstral.CDS.codon123.tree.BS10.tre -o 4.arstral.CDS.codon123.tree.BS10.species.tre -a order.rename.txt 2>4.arstral.CDS.codon123.tree.BS10.species.tre.log
+```
+### plastome (reconstructed a species tree using one individual per species based on the coding sequences (CDS) of 70 protein-coding genes)
+```
+raxmlHPC-PTHREADS -s species-70_cp_cds-half_gap.fasta -n species-70_cp_cds-half_gap.fasta -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
+```
+### Ancestral character reconstruction
+[Mesquite](https://www.mesquiteproject.org/)(Input files: Species tree, Trait file)
 
 ## Macroevolutionary rate estimation
 
@@ -168,7 +178,7 @@ singularity exec -B /data /data/00/user/user109/software/RevBayes/ rb mcmc_HiSSE
 singularity exec -B /data /data/00/user/user109/software/RevBayes/ rb niche.charactor.rev.txt
 ```
 
-## ILS simulation, hybridization inference, and admixture analysis
+## ILS simulation and hybridization inference
 ### Simplified phylogenetic trees (nuclear genome and plastome)
 Selected one individual from each subclade (M1-M18) as a representative and reconstructed phylogenetic trees with Vicia sativa (DRR053677) as an outgroup
 #### For nuclear genome
@@ -176,7 +186,7 @@ Selected one individual from each subclade (M1-M18) as a representative and reco
 ```
 raxmlHPC-PTHREADS -s merge.cds.codon123.fa -n merge.cds.codon123.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
 ```
-##### Used the coalescent method of ASTRAL based on the CDS dataset of 7,990 single copy nuclear genes
+##### Used the gene tree-based method of ASTRAL based on the CDS dataset of 7,990 single copy nuclear genes
 Reconstructed phylogenetic trees of each single copy nuclear gene using RAxML
 ```
 raxmlHPC-PTHREADS -s gene.cds.codon123.nonmiss.fa -n gene.cds.codon123.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
@@ -214,18 +224,13 @@ python twisst.py -t simulated.reroot.order.tree -w simulated.node5.weights -g A 
 ```
 
 ### Hybridization inference
-[PhyloNetworks](https://crsl4.github.io/PhyloNetworks.jl/latest/)
+#### D-statistics
 ```
-sh phyloNetworks.sh
+angsd -doAbbababa 1 -bam 00.medicago.bam.list -doCounts 1 -useLast 1 -rf 55medicago.chr.txt -out 55medicago.abbababa
 ```
-
-### Identity by decent (IBD) blocks analysis based on whole-genome SNPs using BEAGLE
+#### fb(C) statistic
 ```
-java -jar beagle.r1399.jar gt=vcf/Chr.vcf.gz out=vcf/Chr.vcf.gz.1219 ibd=true nthreads=10 window=50000 overlap=3000 ibdtrim=40
+Rscript jackKnife.R file=55medicago.abbababa indNames=00.55medicago.reads.list outfile=55medicago_ABBA_result
 ```
-
-### Admixture analysis (K from 2 to 13)
-e.g., when K=2
-```
-admixture --cv -j30 -B100 ./admixture.DP_6-50_miss_0.2.medicago100.SNP.vcf.gz/DP_6-50_miss_0.2.medicago100.SNP.vcf.gz.extract.ped 2 > ./admixture.DP_6-50_miss_0.2.medicago100.SNP.vcf.gz/DP_6-50_miss_0.2.medicago100.SNP.vcf.gz.extract.log2.out
-```
+fb(C) =medianA[minB [f(A,B;C,O)]]
+Note that negative f scores, i.e. those where A and C share excess alleles relative to B, are set to zero in this calculation
