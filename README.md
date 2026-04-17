@@ -100,6 +100,85 @@ raxmlHPC-PTHREADS -s z131-70_cp_cds-half_gap.fasta -n z131-70_cp_cds-half_gap.fa
 ```
 
 
+## ILS simulation and hybridization inference
+
+### Simplified phylogenetic trees (nuclear genome and plastome)
+
+Selected one individual from each subclade (M1-M18) as a representative and reconstructed phylogenetic trees with Vicia sativa (DRR053677) as an outgroup
+
+#### For nuclear genome
+
+##### Used the concatenation method of RAxML based on the CDS dataset of 7,990 single copy nuclear genes
+
+```
+raxmlHPC-PTHREADS -s merge.cds.codon123.fa -n merge.cds.codon123.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
+```
+
+##### Used the gene tree-based method of ASTRAL based on the CDS dataset of 7,990 single copy nuclear genes
+
+Reconstructed phylogenetic trees of each single copy nuclear gene using RAxML
+```
+raxmlHPC-PTHREADS -s gene.cds.codon123.nonmiss.fa -n gene.cds.codon123.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
+```
+Estimated a coalescent tree using ASTRAL v.5.6.3
+```
+java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.codon123.tree.BS10.tre -o 4.arstral.CDS.codon123.tree.BS10.individual.tre 2>4.arstral.CDS.codon123.tree.BS10.individual.tre.log
+```
+
+#### For plastome
+
+```
+raxmlHPC-PTHREADS -s z19-70_cp_cds-half_gap.fa -n z19-70_cp_cds-half_gap.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 15
+```
+
+### ILS simulation
+
+#### Simulated 10,000 gene trees using the multispecies coalescent model of [Phybase](https://github.com/lliu1871/phybase) using the ASTRAL tree
+
+```
+Rscript phybase.R
+```
+
+#### Calculated gene-tree quartet frequencies of the five incongruent internal nodes in observed and simulated datasets using [Twisst](https://github.com/simonhmartin/twisst)
+
+##### Observed dataset
+
+```
+python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node1.weights -g A M5 -g B M4 -g C M9 -g D M6
+python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node2.weights -g A M8 -g B M9 -g C M7 -g D M10
+python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node3.weights -g A M11 -g B M12 -g C M10 -g D M9
+python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node4.weights -g A M13 -g B M12 -g C M15 -g D M18
+python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node5.weights -g A M17 -g B M16 -g C M15 -g D M18
+```
+
+##### Simulated dataset
+
+```
+python twisst.py -t simulated.reroot.order.tree -w simulated.node1.weights -g A M5 -g B M4 -g C M9 -g D M6
+python twisst.py -t simulated.reroot.order.tree -w simulated.node2.weights -g A M8 -g B M9 -g C M7 -g D M10
+python twisst.py -t simulated.reroot.order.tree -w simulated.node3.weights -g A M11 -g B M12 -g C M10 -g D M9
+python twisst.py -t simulated.reroot.order.tree -w simulated.node4.weights -g A M13 -g B M12 -g C M15 -g D M18
+python twisst.py -t simulated.reroot.order.tree -w simulated.node5.weights -g A M17 -g B M16 -g C M15 -g D M18
+```
+
+### Hybridization inference
+
+#### D-statistics
+
+```
+angsd -doAbbababa 1 -bam 00.medicago.bam.list -doCounts 1 -useLast 1 -rf 55medicago.chr.txt -out 55medicago.abbababa
+```
+```
+Rscript jackKnife.R file=55medicago.abbababa indNames=00.55medicago.reads.list outfile=55medicago_ABBA_result
+```
+
+#### fb(C) statistic
+
+fb(C) =medianA[minB [f(A,B;C,O)]]
+
+Note that negative f scores, i.e. those where A and C share excess alleles relative to B, are set to zero in this calculation
+
+
 ## Divergence time estimation
 
 ### To estimate divergence times, we reconstructed a species tree using the “-a” option in ASTRAL v.5.6.3 based on the 7,990 single-copy gene dataset
@@ -205,82 +284,3 @@ singularity exec -B /data /data/00/user/user109/software/RevBayes/ rb mcmc_HiSSE
 ```
 singularity exec -B /data /data/00/user/user109/software/RevBayes/ rb niche.charactor.rev.txt
 ```
-
-
-## ILS simulation and hybridization inference
-
-### Simplified phylogenetic trees (nuclear genome and plastome)
-
-Selected one individual from each subclade (M1-M18) as a representative and reconstructed phylogenetic trees with Vicia sativa (DRR053677) as an outgroup
-
-#### For nuclear genome
-
-##### Used the concatenation method of RAxML based on the CDS dataset of 7,990 single copy nuclear genes
-
-```
-raxmlHPC-PTHREADS -s merge.cds.codon123.fa -n merge.cds.codon123.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
-```
-
-##### Used the gene tree-based method of ASTRAL based on the CDS dataset of 7,990 single copy nuclear genes
-
-Reconstructed phylogenetic trees of each single copy nuclear gene using RAxML
-```
-raxmlHPC-PTHREADS -s gene.cds.codon123.nonmiss.fa -n gene.cds.codon123.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
-```
-Estimated a coalescent tree using ASTRAL v.5.6.3
-```
-java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.codon123.tree.BS10.tre -o 4.arstral.CDS.codon123.tree.BS10.individual.tre 2>4.arstral.CDS.codon123.tree.BS10.individual.tre.log
-```
-
-#### For plastome
-
-```
-raxmlHPC-PTHREADS -s z19-70_cp_cds-half_gap.fa -n z19-70_cp_cds-half_gap.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 15
-```
-
-### ILS simulation
-
-#### Simulated 10,000 gene trees using the multispecies coalescent model of [Phybase](https://github.com/lliu1871/phybase) using the ASTRAL tree
-
-```
-Rscript phybase.R
-```
-
-#### Calculated gene-tree quartet frequencies of the five incongruent internal nodes in observed and simulated datasets using [Twisst](https://github.com/simonhmartin/twisst)
-
-##### Observed dataset
-
-```
-python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node1.weights -g A M5 -g B M4 -g C M9 -g D M6
-python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node2.weights -g A M8 -g B M9 -g C M7 -g D M10
-python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node3.weights -g A M11 -g B M12 -g C M10 -g D M9
-python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node4.weights -g A M13 -g B M12 -g C M15 -g D M18
-python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node5.weights -g A M17 -g B M16 -g C M15 -g D M18
-```
-
-##### Simulated dataset
-
-```
-python twisst.py -t simulated.reroot.order.tree -w simulated.node1.weights -g A M5 -g B M4 -g C M9 -g D M6
-python twisst.py -t simulated.reroot.order.tree -w simulated.node2.weights -g A M8 -g B M9 -g C M7 -g D M10
-python twisst.py -t simulated.reroot.order.tree -w simulated.node3.weights -g A M11 -g B M12 -g C M10 -g D M9
-python twisst.py -t simulated.reroot.order.tree -w simulated.node4.weights -g A M13 -g B M12 -g C M15 -g D M18
-python twisst.py -t simulated.reroot.order.tree -w simulated.node5.weights -g A M17 -g B M16 -g C M15 -g D M18
-```
-
-### Hybridization inference
-
-#### D-statistics
-
-```
-angsd -doAbbababa 1 -bam 00.medicago.bam.list -doCounts 1 -useLast 1 -rf 55medicago.chr.txt -out 55medicago.abbababa
-```
-```
-Rscript jackKnife.R file=55medicago.abbababa indNames=00.55medicago.reads.list outfile=55medicago_ABBA_result
-```
-
-#### fb(C) statistic
-
-fb(C) =medianA[minB [f(A,B;C,O)]]
-
-Note that negative f scores, i.e. those where A and C share excess alleles relative to B, are set to zero in this calculation
