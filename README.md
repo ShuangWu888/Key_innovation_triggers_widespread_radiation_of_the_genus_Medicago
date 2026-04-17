@@ -120,7 +120,7 @@ Reconstructed phylogenetic trees of each single copy nuclear gene using RAxML
 ```
 raxmlHPC-PTHREADS -s gene.cds.codon123.nonmiss.fa -n gene.cds.codon123.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
 ```
-Estimated a coalescent tree using ASTRAL v.5.6.3
+Estimated a species tree using ASTRAL v.5.6.3
 ```
 java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.codon123.tree.BS10.tre -o 4.arstral.CDS.codon123.tree.BS10.individual.tre 2>4.arstral.CDS.codon123.tree.BS10.individual.tre.log
 ```
