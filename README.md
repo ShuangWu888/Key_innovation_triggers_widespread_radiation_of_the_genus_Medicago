@@ -53,7 +53,7 @@ get_organelle_from_reads.py -1 sample_1_clean.fq.gz -2 sample_2_clean.fq.gz -t 1
 ```
 iqtree2 -s iqtree_DP_6-50_miss_0.2_sativa132_SNP.varsites.phy -st DNA -m GTR+ASC -B 1000 --bnni --prefix iqtree_DP_6-50_miss_0.2_sativa132_BS_SNP -T 50
 ```
-#### For the concatenated CDS alignment of 7,990 single copy nuclear genes
+#### For the CDS alignment of 7,990 single copy nuclear genes
 ##### The concatenated method
 [RaxML](https://github.com/stamatak/standard-RAxML)
 ```
