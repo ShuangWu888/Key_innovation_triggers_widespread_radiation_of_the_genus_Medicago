@@ -1,5 +1,6 @@
 # Key_innovation_triggers_widespread_radiation_of_the_genus_Medicago
 
+
 ## Genotype calling
 Mapped clean reads onto the Medicago sativa subsp. caerulea (voucher PI464715) reference genome using BWA
 ```
@@ -34,6 +35,7 @@ perl identify_single_copy_gene.132sativa.pl
 https://github.com/baileyp1/PhylogenomicsPipelines
 
 ## Plastomes assembly and annotation
+
 ### Assembly
 [NOVOPlasty3.8.3](https://github.com/ndierckx/NOVOPlasty)
 ```
@@ -43,18 +45,25 @@ perl NOVOPlasty3.8.3.pl -c config.txt
 ```
 get_organelle_from_reads.py -1 sample_1_clean.fq.gz -2 sample_2_clean.fq.gz -t 10 -o sample.plastome -F embplant_pt -R 10
 ```
+
 ### Annotation
 [GeSeq](https://chlorobox.mpimp-golm.mpg.de/geseq.html)
 [Geneious v.10.2.6](https://www.geneious.com/)
 
+
 ## Phylogenomic analysis
+
 ### Nuclear genome
+
 #### For the concatenated whole genome SNPs
+
 ```
 iqtree2 -s iqtree_DP_6-50_miss_0.2_sativa132_SNP.varsites.phy -st DNA -m GTR+ASC -B 1000 --bnni --prefix iqtree_DP_6-50_miss_0.2_sativa132_BS_SNP -T 50
 ```
 #### For the CDS alignment of 7,990 single copy nuclear genes
+
 ##### The concatenated method
+
 [RaxML](https://github.com/stamatak/standard-RAxML)
 ```
 raxmlHPC-PTHREADS -s merge.cds.codon123.fa -n merge.cds.codon123.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
@@ -63,6 +72,7 @@ raxmlHPC-PTHREADS -s merge.cds.codon3.fa -n merge.cds.codon3.fa -m GTRCAT -f a -
 raxmlHPC-PTHREADS -s merge.cds.4Dsites.fa -n merge.cds.4Dsites.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
 ```
 ##### The gene tree-based method
+
 Reconstructed phylogenetic trees of each single copy nuclear gene using RAxML
 ```
 raxmlHPC-PTHREADS -s gene.cds.codon123.nonmiss.fa -n gene.cds.codon123.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
@@ -78,31 +88,43 @@ java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.codon3.tree.BS10.tre -o 4.a
 java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.4Dsites.tree.BS10.tre -o 4.arstral.CDS.4Dsites.tree.BS10.individual.tre 2>4.arstral.CDS.4Dsites.tree.BS10.individual.tre.log
 ```
 ### 353 nuclear genes
+
 ```
 raxmlHPC-PTHREADS -s 353-filt0.6.fasta -n 353-filt0.6.fasta -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
 raxmlHPC-PTHREADS -s 353-filt0.7.fasta -n 353-filt0.7.fasta -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
 ```
 ### Plastome
+
 ```
 raxmlHPC-PTHREADS -s z131-70_cp_cds-half_gap.fasta -n z131-70_cp_cds-half_gap.fasta -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
 ```
 
+
 ## Divergence time estimation
+
 ### To estimate divergence times, we reconstructed a species tree using the “-a” option in ASTRAL v.5.6.3 based on the 7,990 single-copy gene dataset
+
 ```
 java -Xmx150G -jar /home/share/users/wushuang2019/software/Astral/astral.5.6.3.jar -i 3.arstral.CDS.codon123.tree.BS10.tre -o 4.arstral.CDS.codon123.tree.BS10.species.tre -a order.rename.txt 2>4.arstral.CDS.codon123.tree.BS10.species.tre.log
 ```
+
 ### r8s
+
 [r8s](https://sourceforge.net/projects/r8s/)
 ```
 r8s -f r8s.84species.timetree5.ctl -b > r8s.84species.timetree5.smooth_100.out
 ```
+
 #### r8s: Bootstrap confidence intervals on parameters
+
 [r8s manual.pdf](https://naturalis.github.io/mebioda/doc/week1/w1d5/r8s1.7.manual.pdf): Bootstrap confidence intervals on parameters (page 25)
 ### RelTime
+
 [RelTime method in MEGA X](https://academic.oup.com/mbe/article/35/9/2334/5042667?login=false)
 
+
 ## Ancestral area reconstruction
+
 Reconstructed ancestral distributions
 ```
 Rscript M0_sativa-origin_maxareas6.R
@@ -112,63 +134,95 @@ Used biogeographic stochastic mapping (BSM) to calculate the type and number of 
 Rscript sativa-origin_BAYAREALIKE+J_BSM_maxareas6.R
 ```
 
+
 ## Ancestral character reconstruction
+
 ### nuclear genome (reconstructed a species tree using the “-a” option in ASTRAL v.5.6.3 based on the 7,990 single-copy gene dataset)
+
 ```
 java -Xmx150G -jar /home/share/users/wushuang2019/software/Astral/astral.5.6.3.jar -i 3.arstral.CDS.codon123.tree.BS10.tre -o 4.arstral.CDS.codon123.tree.BS10.species.tre -a order.rename.txt 2>4.arstral.CDS.codon123.tree.BS10.species.tre.log
 ```
+
 ### plastome (reconstructed a species tree using one individual per species based on the coding sequences (CDS) of 70 protein-coding genes)
+
 ```
 raxmlHPC-PTHREADS -s species-70_cp_cds-half_gap.fasta -n species-70_cp_cds-half_gap.fasta -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
 ```
+
 ### Ancestral character reconstruction
+
 [Mesquite] (https://www.mesquiteproject.org/)(Input files: Species tree, Trait file)
 
+
 ## Macroevolutionary rate estimation
+
 ### Diversification rates estimation
+
 #### Fit a series of time-dependent likelihood diversification models for Medicago using [RPANDA](https://github.com/hmorlon/PANDA/tree/master)
+
 ```
 Rscript RPANDA-time.R
 ```
+
 #### Estimated diversification rates using [BAMM](https://github.com/macroevolution/bamm/tree/master)
+
 ```
 bamm -c BAMM_divcontrol.txt
 ```
+
 ### Traits rates estimation
+
 [BAMM](https://github.com/macroevolution/bamm/tree/master)
 ```
 bamm -c BAMM_traitcontrol.txt
 ```
+
 ### Niche rate estimation
+
 #### Ordinated all 35 environmental variables using phylogenetic principal component analysis (PCA) implemented in the “phyl.pca” function of [phytools](https://github.com/liamrevell/phytools) package
+
 ```
 Rscript phyl.pca.R
 ```
+
 #### Used the trait model of [BAMM](https://github.com/macroevolution/bamm/tree/master) on the first axis of the phylogenetic PCA of the niche data
+
 ```
 bamm -c BAMM_traitcontrol.txt
 ```
 
+
 ## Key innovation test
+
 [HiSSE analysis in RevBayes](https://revbayes.github.io/tutorials/sse/hisse.html)
 ```
 singularity exec -B /data /data/00/user/user109/software/RevBayes/ rb mcmc_HiSSE.Rev.txt
 ```
+
 ## Reconstruction of ancestral niches for annual and perennial Medicago species
+
 [RevBayes](https://revbayes.github.io/tutorials/)
 ```
 singularity exec -B /data /data/00/user/user109/software/RevBayes/ rb niche.charactor.rev.txt
 ```
 
+
 ## ILS simulation and hybridization inference
+
 ### Simplified phylogenetic trees (nuclear genome and plastome)
+
 Selected one individual from each subclade (M1-M18) as a representative and reconstructed phylogenetic trees with Vicia sativa (DRR053677) as an outgroup
+
 #### For nuclear genome
+
 ##### Used the concatenation method of RAxML based on the CDS dataset of 7,990 single copy nuclear genes
+
 ```
 raxmlHPC-PTHREADS -s merge.cds.codon123.fa -n merge.cds.codon123.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 30
 ```
+
 ##### Used the gene tree-based method of ASTRAL based on the CDS dataset of 7,990 single copy nuclear genes
+
 Reconstructed phylogenetic trees of each single copy nuclear gene using RAxML
 ```
 raxmlHPC-PTHREADS -s gene.cds.codon123.nonmiss.fa -n gene.cds.codon123.nonmiss.fa -m GTRGAMMAI -f a -x 12345 -N 100 -p 12345 -T 4
@@ -177,17 +231,25 @@ Estimated a coalescent tree using ASTRAL v.5.6.3
 ```
 java -Xmx200G -jar astral.5.6.3.jar -i 3.arstral.CDS.codon123.tree.BS10.tre -o 4.arstral.CDS.codon123.tree.BS10.individual.tre 2>4.arstral.CDS.codon123.tree.BS10.individual.tre.log
 ```
+
 #### For plastome
+
 ```
 raxmlHPC-PTHREADS -s z19-70_cp_cds-half_gap.fa -n z19-70_cp_cds-half_gap.fa -m GTRCAT -f a -x 12345 -N 100 -p 12345 -T 15
 ```
+
 ### ILS simulation
+
 #### Simulated 10,000 gene trees using the multispecies coalescent model of [Phybase](https://github.com/lliu1871/phybase) using the ASTRAL tree
+
 ```
 Rscript phybase.R
 ```
+
 #### Calculated gene-tree quartet frequencies of the five incongruent internal nodes in observed and simulated datasets using [Twisst](https://github.com/simonhmartin/twisst)
+
 ##### Observed dataset
+
 ```
 python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node1.weights -g A M5 -g B M4 -g C M9 -g D M6
 python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node2.weights -g A M8 -g B M9 -g C M7 -g D M10
@@ -195,7 +257,9 @@ python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.no
 python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node4.weights -g A M13 -g B M12 -g C M15 -g D M18
 python twisst.py -t 2.arstral.CDS.simple.reroot.order.rename.tree -w Observed.node5.weights -g A M17 -g B M16 -g C M15 -g D M18
 ```
+
 ##### Simulated dataset
+
 ```
 python twisst.py -t simulated.reroot.order.tree -w simulated.node1.weights -g A M5 -g B M4 -g C M9 -g D M6
 python twisst.py -t simulated.reroot.order.tree -w simulated.node2.weights -g A M8 -g B M9 -g C M7 -g D M10
@@ -203,14 +267,20 @@ python twisst.py -t simulated.reroot.order.tree -w simulated.node3.weights -g A 
 python twisst.py -t simulated.reroot.order.tree -w simulated.node4.weights -g A M13 -g B M12 -g C M15 -g D M18
 python twisst.py -t simulated.reroot.order.tree -w simulated.node5.weights -g A M17 -g B M16 -g C M15 -g D M18
 ```
+
 ### Hybridization inference
+
 #### D-statistics
+
 ```
 angsd -doAbbababa 1 -bam 00.medicago.bam.list -doCounts 1 -useLast 1 -rf 55medicago.chr.txt -out 55medicago.abbababa
 ```
+
 #### fb(C) statistic
+
 ```
 Rscript jackKnife.R file=55medicago.abbababa indNames=00.55medicago.reads.list outfile=55medicago_ABBA_result
 ```
 fb(C) =medianA[minB [f(A,B;C,O)]]
+
 Note that negative f scores, i.e. those where A and C share excess alleles relative to B, are set to zero in this calculation
